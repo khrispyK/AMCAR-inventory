@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <title>AMCAR Inventory MVP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+      }
+      #preview {
+        max-width: 250px;
+        margin-top: 10px;
+        display: none;
+      }
+      #resultBox,
+      #formBox {
+        display: none;
+        margin-top: 20px;
+      }
+      input,
+      button {
+        padding: 10px;
+        width: 100%;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>📦 AMCAR Inventory Scanner</h2>
+
+    <label>Take or upload a barcode image:</label>
+    <input
+      type="file"
+      accept="image/*"
+      capture="environment"
+      id="barcodeInput"
+    />
+
+    <img id="preview" />
+
+    <div id="resultBox">
+      <h3>Detected barcode:</h3>
+      <p
+        id="decodedText"
+        style="font-size: 20px; font-weight: bold; color: #007bff"
+      ></p>
+    </div>
+
+    <input id="code" placeholder="Enter Code" />
+    <input id="description" placeholder="Description" viewonly />
+
+    <div id="formBox">
+      <label>Part Description</label>
+      <input type="text" id="description" />
+
+      <label>Quantity</label>
+      <input type="number" id="quantity" />
+
+      <label>Location</label>
+      <input type="text" id="location" />
+
+      <button onclick="submitForm()">Save to CSV</button>
+    </div>
+
+    <button onclick="downloadCSV()">Download CSV</button>
+    <script src="script.js"></script>
+  </body>
+</html>

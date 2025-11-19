@@ -1,77 +1,100 @@
 import express from "express";
-import fs from "fs";
-import csv from "csv-parser";
-import { createObjectCsvWriter } from "csv-writer";
-import bodyParser from "body-parser";
 import cors from "cors";
+import bodyParser from "body-parser";
+import fs from "fs-extra";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
-app.use(express.static("public"));
-app.use(bodyParser.json());
 app.use(cors());
+app.use(bodyParser.json());
 
-// -------- LOGIN API --------
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
+// Fix __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-  // MVP: hardcoded credentials
-  if (username === "admin" && password === "1234") {
+// Paths to JSON DB
+const scansPath = path.join(__dirname, "db", "scans.json");
+const partsPath = path.join(__dirname, "db", "parts.json");
+
+// Ensure DB files exist
+await fs.ensureFile(scansPath);
+await fs.ensureFile(partsPath);
+
+if (!(await fs.readFile(scansPath, "utf8"))) {
+    await fs.writeJson(scansPath, []);
+}
+if (!(await fs.readFile(partsPath, "utf8"))) {
+    await fs.writeJson(partsPath, []);
+}
+
+// Load DB into memory
+let scans = await fs.readJson(scansPath);
+let parts = await fs.readJson(partsPath);
+
+// Save function (writes to disk)
+async function saveDB() {
+    await fs.writeJson(scansPath, scans, { spaces: 2 });
+    await fs.writeJson(partsPath, parts, { spaces: 2 });
+}
+
+// API endpoint to save scan
+app.post("/api/scan", async (req, res) => {
+    const { code, description, quantity, location } = req.body;
+
+    if (!code) {
+        return res.json({ success: false, message: "No barcode detected." });
+    }
+
+    const entry = {
+        code,
+        description: description || "",
+        quantity: Number(quantity) || 0,
+        location: location || "",
+        timestamp: new Date().toISOString()
+    };
+
+    scans.push(entry);
+    await saveDB();
+
     return res.json({ success: true });
-  }
-
-  return res.json({ success: false, message: "Invalid credentials" });
 });
 
-// -------- LOOKUP PART DESCRIPTION --------
-app.get("/description/:barcode", (req, res) => {
-  const barcode = req.params.barcode;
-  const results = [];
-
-  fs.createReadStream("parts.csv")
-    .pipe(csv())
-    .on("data", data => results.push(data))
-    .on("end", () => {
-      const item = results.find(row => row.barcode === barcode);
-
-      if (!item) {
-        return res.json({ found: false });
-      }
-
-      return res.json({ found: true, description: item.description });
-    });
+// Optional: GET all scans (admin dashboard later)
+app.get("/api/scans", (req, res) => {
+    res.json(scans);
 });
 
-// -------- SAVE SCANNED PART --------
-app.post("/submit", (req, res) => {
-  const { barcode, description, quantity, location } = req.body;
+// Optional: GET parts descriptions
+app.get("/api/parts", (req, res) => {
+    res.json(parts);
+});
 
-  if (!barcode || !description || !quantity || !location) {
-    return res.json({ success: false, message: "Missing fields." });
+// CSV export
+app.get("/api/export-csv", async (req, res) => {
+  const scans = await fs.readJson(scansPath);
+
+  if (!scans.length) {
+      return res.status(400).send("No scans to export.");
   }
 
-  const timestamp = new Date().toISOString();
+  // CSV headers
+  let csv = "code,description,quantity,location,timestamp\n";
 
-  const csvWriter = createObjectCsvWriter({
-    path: "scanned_parts.csv",
-    header: [
-      { id: "timestamp", title: "timestamp" },
-      { id: "barcode", title: "barcode" },
-      { id: "description", title: "description" },
-      { id: "quantity", title: "quantity" },
-      { id: "location", title: "location" }
-    ],
-    append: true
+  // Rows
+  scans.forEach(s => {
+      csv += `${s.code},${s.description || ""},${s.quantity},${s.location},${s.timestamp}\n`;
   });
 
-  csvWriter
-    .writeRecords([{ timestamp, barcode, description, quantity, location }])
-    .then(() => {
-      return res.json({ success: true });
-    });
+  res.setHeader("Content-disposition", "attachment; filename=scanned_parts.csv");
+  res.set("Content-Type", "text/csv");
+  res.status(200).send(csv);
 });
 
-// -------- START SERVER --------
+
+// Serve frontend
+app.use(express.static(path.join(__dirname, "public")));
+
+// Start server
 const PORT = 3000;
-app.listen(PORT, () => {
-  console.log("Server running on http://localhost:" + PORT);
-});
+app.listen(PORT, () => console.log(`AMCAR MVP running on http://localhost:${PORT}`));
