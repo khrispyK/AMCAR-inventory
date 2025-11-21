@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "code": "ABC-abc-1234",
+    "description": "",
+    "quantity": 600,
+    "location": "Kdhdoshs",
+    "timestamp": "2025-11-21T00:51:03.515Z"
+  },
+  {
+    "code": "A23-9F1",
+    "description": "Engine Oil Filter",
+    "quantity": 23,
+    "location": "Room 5",
+    "timestamp": "2025-11-21T02:01:20.442Z"
+  },
+  {
+    "code": "A23-9F3",
+    "description": "Fuel Filter",
+    "quantity": 56,
+    "location": "Room 3",
+    "timestamp": "2025-11-21T02:02:22.975Z"
+  },
+  {
+    "code": "A23-9F4",
+    "description": "Oil Filter",
+    "quantity": 365,
+    "location": "Room 1",
+    "timestamp": "2025-11-21T02:03:40.754Z"
+  }
+]

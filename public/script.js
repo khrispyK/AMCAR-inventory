@@ -24,11 +24,11 @@ async function handleImageUpload(e) {
 
     // show UI
     document.getElementById("decodedText").textContent = barcode;
+    document.getElementById("codeField").textContent = barcode;
+    document.getElementById("description").textContent = partsData.find(p => p.code === barcode).description;
+
     document.getElementById("resultBox").style.display = "block";
     document.getElementById("formBox").style.display = "block";
-
-    // auto-fill description (hardcoded DB later)
-    document.getElementById("description").value = "";
 }
 
 async function preprocessImage(file) {
@@ -77,7 +77,7 @@ function decodeImage(buffer) {
 async function submitForm() {
     const data = {
         code: document.getElementById("decodedText").textContent,
-        description: document.getElementById("description").value,
+        description: document.getElementById("description").textContent,
         quantity: document.getElementById("quantity").value,
         location: document.getElementById("location").value
     };
@@ -119,21 +119,22 @@ async function loadParts() {
 loadParts();
 
 function updateDescriptionFromCode(code) {
-  const descriptionInput = document.getElementById("description");
+    const descDisplay = document.getElementById("description");
 
-  if (!partsData.length) {
-    descriptionInput.value = "Parts not loaded yet...";
-    return;
-  }
+    if (!partsData.length) {
+        descDisplay.textContent = "Parts not loaded yet";
+        return;
+    }
 
-  const part = partsData.find(p => p.code === code);
+    const part = partsData.find(p => p.code === code);
 
-  if (part) {
-    descriptionInput.value = part.description;
-  } else {
-    descriptionInput.value = "Unknown Part Code";
-  }
+    if (part) {
+        descDisplay.textContent = part.description;
+    } else {
+        descDisplay.textContent = "Unknown Part Code";
+    }
 }
+
 
 document.getElementById("code").addEventListener("change", (e) => {
   updateDescriptionFromCode(e.target.value.trim());

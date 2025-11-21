@@ -41,20 +41,27 @@
     <img id="preview" />
 
     <div id="resultBox">
-      <h3>Detected barcode:</h3>
+      <div style="display: none">
+        <p
+          id="decodedText"
+          style="font-size: 20px; font-weight: bold; color: #007bff"
+        ></p>
+      </div>
+
+      <h3>Part Code:</h3>
       <p
-        id="decodedText"
+        id="codeField"
+        style="font-size: 20px; font-weight: bold; color: #007bff"
+      ></p>
+
+      <h3>Part Description:</h3>
+      <p
+        id="description"
         style="font-size: 20px; font-weight: bold; color: #007bff"
       ></p>
     </div>
 
-    <input id="code" placeholder="Enter Code" />
-    <input id="description" placeholder="Description" viewonly />
-
     <div id="formBox">
-      <label>Part Description</label>
-      <input type="text" id="description" />
-
       <label>Quantity</label>
       <input type="number" id="quantity" />
 
