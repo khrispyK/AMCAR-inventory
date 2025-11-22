@@ -92,7 +92,9 @@ async function submitForm() {
 
     if (result.success) {
         alert("✅ Saved to local database!");
-        document.getElementById("formBox").style.display = "none";
+        // document.getElementById("formBox").style.display = "none";
+        // 🔥 Auto reload for fresh new input
+        location.reload();
     } else {
         alert("❌ Error saving.");
     }
@@ -134,7 +136,6 @@ function updateDescriptionFromCode(code) {
         descDisplay.textContent = "Unknown Part Code";
     }
 }
-
 
 document.getElementById("code").addEventListener("change", (e) => {
   updateDescriptionFromCode(e.target.value.trim());
