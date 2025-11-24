@@ -25,10 +25,20 @@ async function handleImageUpload(e) {
     // show UI
     document.getElementById("decodedText").textContent = barcode;
     document.getElementById("codeField").textContent = barcode;
-    document.getElementById("description").textContent = partsData.find(p => p.code === barcode).description;
+    // document.getElementById("description").textContent = partsData.find(p => p.code === barcode).description;
 
+    const part = partsData.find(p => p.code === barcode);
+
+if (!part) {
+    alert("❌ Unknown part code — not in database.");
+    location.reload();
+    return;
+}
+
+document.getElementById("description").textContent = part.description;
     document.getElementById("resultBox").style.display = "block";
     document.getElementById("formBox").style.display = "block";
+    
 }
 
 async function preprocessImage(file) {
@@ -75,11 +85,14 @@ function decodeImage(buffer) {
 }
 
 async function submitForm() {
+    const user = localStorage.getItem("user");
+
     const data = {
         code: document.getElementById("decodedText").textContent,
         description: document.getElementById("description").textContent,
         quantity: document.getElementById("quantity").value,
-        location: document.getElementById("location").value
+        location: document.getElementById("location").value,
+        encodedBy: user
     };
 
     const res = await fetch("/api/scan", {
@@ -92,8 +105,6 @@ async function submitForm() {
 
     if (result.success) {
         alert("✅ Saved to local database!");
-        // document.getElementById("formBox").style.display = "none";
-        // 🔥 Auto reload for fresh new input
         location.reload();
     } else {
         alert("❌ Error saving.");
@@ -133,10 +144,35 @@ function updateDescriptionFromCode(code) {
     if (part) {
         descDisplay.textContent = part.description;
     } else {
-        descDisplay.textContent = "Unknown Part Code";
+        // Unknown code → show popup and reload
+        alert("❌ Unknown part code — not in database.");
+        location.reload();
     }
 }
 
-document.getElementById("code").addEventListener("change", (e) => {
-  updateDescriptionFromCode(e.target.value.trim());
-});
+
+// document.getElementById("code").addEventListener("change", (e) => {
+//   updateDescriptionFromCode(e.target.value.trim());
+// });
+
+function useManualCode() {
+    const manualCode = document.getElementById("manualCodeInput").value.trim();
+    if (!manualCode) {
+        alert("Please enter a part code.");
+        return;
+    }
+
+    // Set UI values
+    document.getElementById("decodedText").textContent = manualCode;
+    document.getElementById("codeField").textContent = manualCode;
+
+    // Update description via parts.json
+    updateDescriptionFromCode(manualCode);
+
+    // Show result and form
+    document.getElementById("resultBox").style.display = "block";
+    document.getElementById("formBox").style.display = "block";
+
+    // Clear preview + scanner result
+    document.getElementById("preview").style.display = "none";
+}

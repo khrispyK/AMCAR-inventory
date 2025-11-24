@@ -21,6 +21,62 @@
   },
   {
     "code": "A23-9F6",
-    "description": "Fuel Filter"
+    "description": "Fuel Pump Assembly"
+  },
+  {
+    "code": "A23-9F7",
+    "description": "Front Brake Pads"
+  },
+  {
+    "code": "A23-9F8",
+    "description": "Rear Brake Shoes"
+  },
+  {
+    "code": "A23-9F9",
+    "description": "Spark Plug Set"
+  },
+  {
+    "code": "A23-9F10",
+    "description": "Alternator Assembly"
+  },
+  {
+    "code": "A23-9F11",
+    "description": "Starter Motor"
+  },
+  {
+    "code": "A23-9F12",
+    "description": "Radiator Fan Motor"
+  },
+  {
+    "code": "A23-9F13",
+    "description": "A/C Compressor"
+  },
+  {
+    "code": "A23-9F14",
+    "description": "Timing Belt"
+  },
+  {
+    "code": "A23-9F15",
+    "description": "Power Steering Belt"
+  },
+  {
+    "code": "A23-9F16",
+    "description": "Upper Ball Joint"
+  },
+  {
+    "code": "A23-9F17",
+    "description": "Front Shock Absorber"
+  },
+  {
+    "code": "A23-9F18",
+    "description": "Headlight Bulb H4 12V"
+  },
+  {
+    "code": "A23-9F19",
+    "description": "Car Battery 3SMF"
+  },
+  {
+    "code": "A23-9F20",
+    "description": "Radiator Coolant 1L"
   }
 ]

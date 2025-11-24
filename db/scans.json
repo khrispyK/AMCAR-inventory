@@ -54,5 +54,35 @@
     "quantity": 6484,
     "location": "Hshsjdhs",
     "timestamp": "2025-11-22T06:26:20.184Z"
+  },
+  {
+    "code": "A23-9F13",
+    "description": "A/C Compressor",
+    "quantity": 233,
+    "location": "idbskshsk",
+    "timestamp": "2025-11-24T00:52:18.439Z"
+  },
+  {
+    "code": "A23-9F14",
+    "description": "Timing Belt",
+    "quantity": 322,
+    "location": "ROOM 4",
+    "timestamp": "2025-11-24T01:10:02.136Z"
+  },
+  {
+    "code": "A23-9F17",
+    "description": "Front Shock Absorber",
+    "quantity": 56,
+    "location": "Room6",
+    "encodedBy": "admin",
+    "timestamp": "2025-11-24T01:52:59.786Z"
+  },
+  {
+    "code": "A23-9F19",
+    "description": "Car Battery 3SMF",
+    "quantity": 345,
+    "location": "room34",
+    "encodedBy": "admin",
+    "timestamp": "2025-11-24T01:56:49.325Z"
   }
 ]

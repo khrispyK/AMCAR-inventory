@@ -2,6 +2,7 @@
 <html>
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+
     <title>AMCAR Inventory MVP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
@@ -27,6 +28,13 @@
       }
     </style>
   </head>
+  <script>
+    const user = localStorage.getItem("user");
+    if (!user) {
+      window.location.href = "login.html";
+    }
+  </script>
+
   <body>
     <h2>📦 AMCAR Inventory Scanner</h2>
 
@@ -39,6 +47,15 @@
     />
 
     <img id="preview" />
+
+    <h3>Manual Barcode Entry (for unreadable barcodes)</h3>
+    <input
+      type="text"
+      id="manualCodeInput"
+      placeholder="Enter Part Code Manually"
+    />
+
+    <button onclick="useManualCode()">Use Manual Code</button>
 
     <div id="resultBox">
       <div style="display: none">

@@ -40,7 +40,7 @@ async function saveDB() {
 
 // API endpoint to save scan
 app.post("/api/scan", async (req, res) => {
-    const { code, description, quantity, location } = req.body;
+    const { code, description, quantity, location, encodedBy } = req.body;
 
     if (!code) {
         return res.json({ success: false, message: "No barcode detected." });
@@ -51,6 +51,7 @@ app.post("/api/scan", async (req, res) => {
         description: description || "",
         quantity: Number(quantity) || 0,
         location: location || "",
+        encodedBy: encodedBy || "UNKNOWN",
         timestamp: new Date().toISOString()
     };
 
@@ -79,12 +80,12 @@ app.get("/api/export-csv", async (req, res) => {
   }
 
   // CSV headers
-  let csv = "code,description,quantity,location,timestamp\n";
+  let csv = "code,description,quantity,location,timestamp,encodedBy\n";
 
-  // Rows
-  scans.forEach(s => {
-      csv += `${s.code},${s.description || ""},${s.quantity},${s.location},${s.timestamp}\n`;
-  });
+scans.forEach(s => {
+    csv += `${s.code},${s.description || ""},${s.quantity},${s.location},${s.timestamp},${s.encodedBy}\n`;
+});
+
 
   res.setHeader("Content-disposition", "attachment; filename=scanned_parts.csv");
   res.set("Content-Type", "text/csv");
@@ -98,3 +99,21 @@ app.use(express.static(path.join(__dirname, "public")));
 // Start server
 const PORT = 3000;
 app.listen(PORT, () => console.log(`AMCAR MVP running on http://localhost:${PORT}`));
+
+const usersPath = path.join(__dirname, "db", "users.json");
+await fs.ensureFile(usersPath);
+let users = await fs.readJson(usersPath);
+
+app.post("/api/login", (req, res) => {
+    const { username, password } = req.body;
+
+    const user = users.find(
+        u => u.username === username && u.password === password
+    );
+
+    if (user) {
+        return res.json({ success: true, user: user.username });
+    } else {
+        return res.json({ success: false });
+    }
+});

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+      }
+      input,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>🔐 Login</h2>
+
+    <input id="username" placeholder="Username" />
+    <input id="password" type="password" placeholder="Password" />
+
+    <button onclick="login()">Login</button>
+
+    <script>
+      async function login() {
+        const data = {
+          username: document.getElementById("username").value.trim(),
+          password: document.getElementById("password").value.trim(),
+        };
+
+        const res = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          localStorage.setItem("user", result.user);
+          window.location.href = "index.html";
+        } else {
+          alert("❌ Invalid username or password");
+        }
+      }
+    </script>
+  </body>
+</html>
