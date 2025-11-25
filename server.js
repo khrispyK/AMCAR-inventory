@@ -40,7 +40,7 @@ async function saveDB() {
 
 // API endpoint to save scan
 app.post("/api/scan", async (req, res) => {
-    const { code, description, quantity, location, encodedBy } = req.body;
+    const { code, description, quantity, location, encodedBy, mmpcPart } = req.body;
 
     if (!code) {
         return res.json({ success: false, message: "No barcode detected." });
@@ -51,6 +51,7 @@ app.post("/api/scan", async (req, res) => {
         description: description || "",
         quantity: Number(quantity) || 0,
         location: location || "",
+        mmpcPart: mmpcPart || "No",   // DEFAULT = No
         encodedBy: encodedBy || "UNKNOWN",
         timestamp: new Date().toISOString()
     };
@@ -80,10 +81,11 @@ app.get("/api/export-csv", async (req, res) => {
   }
 
   // CSV headers
-  let csv = "code,description,quantity,location,timestamp,encodedBy\n";
+  let csv = "code,description,quantity,location,mmpcPart,timestamp,encodedBy\n";
+
 
 scans.forEach(s => {
-    csv += `${s.code},${s.description || ""},${s.quantity},${s.location},${s.timestamp},${s.encodedBy}\n`;
+    csv += `${s.code},${s.description || ""},${s.quantity},${s.location},${s.mmpcPart || "No"},${s.timestamp},${s.encodedBy}\n`;
 });
 
 
@@ -116,4 +118,19 @@ app.post("/api/login", (req, res) => {
     } else {
         return res.json({ success: false });
     }
+});
+
+app.get("/api/lookup/:code", (req, res) => {
+    const code = req.params.code;
+    const part = parts.find(p => p.code === code);
+
+    if (!part) {
+        return res.json({ found: false });
+    }
+
+    res.json({
+        found: true,
+        description: part.description,
+        mmpcPart: part.mmpcPart || "No"
+    });
 });

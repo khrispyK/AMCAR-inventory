@@ -36,6 +36,8 @@ if (!part) {
 }
 
 document.getElementById("description").textContent = part.description;
+document.getElementById("mmpcField").textContent = part.mmpcPart || "No";
+
     document.getElementById("resultBox").style.display = "block";
     document.getElementById("formBox").style.display = "block";
     
@@ -92,6 +94,7 @@ async function submitForm() {
         description: document.getElementById("description").textContent,
         quantity: document.getElementById("quantity").value,
         location: document.getElementById("location").value,
+        mmpcPart: document.getElementById("mmpcField").textContent,
         encodedBy: user
     };
 
@@ -143,6 +146,7 @@ function updateDescriptionFromCode(code) {
 
     if (part) {
         descDisplay.textContent = part.description;
+        document.getElementById("mmpcField").textContent = part.mmpcPart || "No";
     } else {
         // Unknown code → show popup and reload
         alert("❌ Unknown part code — not in database.");

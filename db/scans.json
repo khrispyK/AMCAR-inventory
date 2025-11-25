@@ -84,5 +84,14 @@
     "location": "room34",
     "encodedBy": "admin",
     "timestamp": "2025-11-24T01:56:49.325Z"
+  },
+  {
+    "code": "A23-9F20",
+    "description": "Radiator Coolant 1L",
+    "quantity": 3455,
+    "location": "room 2",
+    "mmpcPart": "Yes",
+    "encodedBy": "kaira",
+    "timestamp": "2025-11-25T01:03:12.186Z"
   }
 ]
