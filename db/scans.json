@@ -93,5 +93,68 @@
     "mmpcPart": "Yes",
     "encodedBy": "kaira",
     "timestamp": "2025-11-25T01:03:12.186Z"
+  },
+  {
+    "code": "0304505350",
+    "description": "CABLEBATTERY WIRING",
+    "quantity": 87878,
+    "location": "kdushfkjdf",
+    "mmpcPart": "Yes",
+    "encodedBy": "kaira",
+    "timestamp": "2025-11-25T01:56:15.001Z"
+  },
+  {
+    "code": "0311921000",
+    "description": "BLOCKCHASSIS HARNESS JCT",
+    "quantity": 569,
+    "location": "room1",
+    "mmpcPart": "Yes",
+    "encodedBy": "admin",
+    "timestamp": "2025-11-25T02:04:42.930Z"
+  },
+  {
+    "code": "0311921000",
+    "description": "BLOCKCHASSIS HARNESS JCT",
+    "quantity": 456,
+    "location": "rm3",
+    "mmpcPart": "Yes",
+    "encodedBy": "admin",
+    "timestamp": "2025-11-25T02:37:22.386Z"
+  },
+  {
+    "code": "0-320-043-90",
+    "description": "HORN BOSCH (12V)",
+    "quantity": 45,
+    "location": "room 3",
+    "mmpcPart": "No",
+    "encodedBy": "kaira",
+    "timestamp": "2025-11-26T00:21:57.369Z"
+  },
+  {
+    "code": "0-332-019-15",
+    "description": "RELAY BOSCH (12V)",
+    "quantity": 23,
+    "location": "Rm7",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "timestamp": "2025-11-26T00:25:09.143Z"
+  },
+  {
+    "code": "0-320-043-90",
+    "description": "HORN BOSCH (12V)",
+    "quantity": 23,
+    "location": "room1",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "timestamp": "2025-12-01T01:25:01.338Z"
+  },
+  {
+    "code": "LT000001",
+    "description": "BEDLINER",
+    "quantity": 3,
+    "location": "gs",
+    "mmpcPart": "Yes",
+    "encodedBy": "admin",
+    "timestamp": "2025-12-01T01:30:35.247Z"
   }
 ]

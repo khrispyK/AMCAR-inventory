@@ -94,6 +94,9 @@ scans.forEach(s => {
   res.status(200).send(csv);
 });
 
+app.get("/login", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "login.html"));
+  });  
 
 // Serve frontend
 app.use(express.static(path.join(__dirname, "public")));
