@@ -156,5 +156,68 @@
     "mmpcPart": "Yes",
     "encodedBy": "admin",
     "timestamp": "2025-12-01T01:30:35.247Z"
+  },
+  {
+    "code": "6121A540",
+    "description": "GLASS QTR WINDOW RH",
+    "quantity": 1,
+    "location": "Room1",
+    "mmpcPart": "Yes",
+    "encodedBy": "kaira",
+    "timestamp": "2025-12-01T03:12:11.040Z"
+  },
+  {
+    "code": "6121A540",
+    "description": "GLASS QTR WINDOW RH",
+    "quantity": 2,
+    "location": "Room2",
+    "mmpcPart": "Yes",
+    "encodedBy": "kaira",
+    "timestamp": "2025-12-01T03:14:43.367Z"
+  },
+  {
+    "code": "LT000001",
+    "description": "BEDLINER",
+    "quantity": 3,
+    "location": "Room 3 ",
+    "mmpcPart": "Yes",
+    "encodedBy": "admin",
+    "timestamp": "2025-12-01T07:03:13.975Z"
+  },
+  {
+    "code": "6121A540",
+    "description": "GLASS QTR WINDOW RH",
+    "quantity": 1,
+    "location": "Room 1",
+    "mmpcPart": "Yes",
+    "encodedBy": "admin",
+    "timestamp": "2025-12-01T07:07:13.919Z"
+  },
+  {
+    "code": "6121A540",
+    "description": "GLASS QTR WINDOW RH",
+    "quantity": 1,
+    "location": "Room 2",
+    "mmpcPart": "Yes",
+    "encodedBy": "kaira",
+    "timestamp": "2025-12-01T07:23:12.569Z"
+  },
+  {
+    "code": "6121A540",
+    "description": "GLASS QTR WINDOW RH",
+    "quantity": 2,
+    "location": "Room 1",
+    "mmpcPart": "Yes",
+    "encodedBy": "kaira",
+    "timestamp": "2025-12-01T07:35:28.753Z"
+  },
+  {
+    "code": "6121A540",
+    "description": "GLASS QTR WINDOW RH",
+    "quantity": 2,
+    "location": "Room 2",
+    "mmpcPart": "Yes",
+    "encodedBy": "kaira",
+    "timestamp": "2025-12-01T07:38:33.501Z"
   }
 ]

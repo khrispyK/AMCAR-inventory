@@ -1,51 +1,409 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AMCAR Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
       body {
-        font-family: Arial;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        background: black;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         padding: 20px;
       }
-      input,
-      button {
+
+      .login-container {
+        background: white;
+        border-radius: 24px;
+        padding: 40px 30px;
         width: 100%;
-        padding: 10px;
-        margin-top: 10px;
+        max-width: 420px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.5s ease-out;
       }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo-section {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .logo-icon {
+        font-size: 64px;
+        margin-bottom: 16px;
+        display: inline-block;
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .logo-title {
+        font-size: 26px;
+        font-weight: 700;
+        color: #EF4444;
+        margin-bottom: 8px;
+      }
+
+      .logo-subtitle {
+        font-size: 14px;
+        color: #6B7280;
+        font-weight: 500;
+      }
+
+      .login-title {
+        font-size: 25px;
+        font-weight: 700;
+        color: #1F2937;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+
+      .login-subtitle {
+        font-size: 14px;
+        color: #6B7280;
+        margin-bottom: 32px;
+        text-align: center;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: #9CA3AF;
+      }
+
+      input {
+        width: 100%;
+        padding: 14px 16px 14px 48px;
+        border: 2px solid #E5E7EB;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: all 0.2s;
+        background: #F9FAFB;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #ff4b4b;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(76, 111, 255, 0.1);
+      }
+
+      input::placeholder {
+        color: #9CA3AF;
+      }
+
+      .login-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #ff4b4b 0%, #130808 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 24px;
+        box-shadow: 0 4px 16px rgba(76, 111, 255, 0.4);
+        transition: all 0.2s;
+      }
+
+      .login-btn:active {
+        transform: scale(0.98);
+        box-shadow: 0 2px 8px rgba(76, 111, 255, 0.4);
+      }
+
+      .login-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .error-message {
+        background: #FEE2E2;
+        color: #DC2626;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 14px;
+        margin-top: 16px;
+        display: none;
+        animation: shake 0.4s;
+      }
+
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      .footer-text {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 13px;
+        color: #6B7280;
+      }
+
+      /* Loading spinner */
+      .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+        margin-left: 8px;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      .hidden {
+        display: none;
+      }
+      .toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  transition: 0.2s ease;
+}
+
+.toggle-password:hover {
+  opacity: 1;
+}
+
+.toggle-password svg {
+  width: 22px;
+  height: 22px;
+}
     </style>
   </head>
   <body>
-    <h2>🔐 Login</h2>
+    <div class="login-container">
+      <div class="logo-section">
+        <div class="logo-icon">
+  <img src="Mitsubishi_logo.svg" alt="Mitsubishi_logo.svg" style="width:100px;">
+      </div>
+        <div class="logo-title">AMCAR Automotive</div>
+        <div class="logo-subtitle">Inventory Management System</div>
+      </div>
 
-    <input id="username" placeholder="Username" />
-    <input id="password" type="password" placeholder="Password" />
+      <h2 class="login-title">Welcome</h2>
+      <p class="login-subtitle">Please enter your credentials to continue</p>
 
-    <button onclick="login()">Login</button>
+      <form onsubmit="login(event)">
+
+  <!-- USERNAME -->
+  <div class="input-group">
+    <label class="input-label">Username</label>
+    <div class="input-wrapper" style="position: relative;">
+      <!-- User Icon -->
+      <span class="input-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" 
+             viewBox="0 0 24 24" stroke="currentColor">
+          <circle cx="12" cy="8" r="4" stroke-width="2"/>
+          <path stroke-width="2" d="M4 20c0-4 4-7 8-7s8 3 8 7"/>
+        </svg>
+      </span>
+
+      <input 
+        id="username" 
+        type="text"
+        placeholder="Enter your username" 
+        required
+        autocomplete="username"
+      />
+    </div>
+  </div>
+
+  <!-- PASSWORD -->
+  <div class="input-group">
+    <label class="input-label">Password</label>
+    <div class="input-wrapper" style="position: relative;">
+
+      <!-- Lock Icon -->
+      <span class="input-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <rect x="5" y="10" width="14" height="10" rx="2" stroke-width="2"/>
+          <path stroke-width="2" d="M12 4a4 4 0 00-4 4v2h8V8a4 4 0 00-4-4z"/>
+        </svg>
+      </span>
+
+      <input 
+        id="password"
+        type="password"
+        placeholder="Enter your password"
+        required
+        autocomplete="current-password"
+      />
+
+    <!-- Show / Hide Password Button -->
+    <span id="togglePassword" class="toggle-password">
+      <!-- Eye Icon (Show) -->
+      <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-width="2" d="M1.5 12s3.5-7 10.5-7 10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z"/>
+        <circle cx="12" cy="12" r="3" stroke-width="2"/>
+      </svg>
+
+      <!-- Eye Off Icon (Hide) -->
+      <svg id="eyeClosed" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-width="2" d="M3 3l18 18"/>
+        <path stroke-width="2" d="M10.585 10.585A3 3 0 0113.415 13.415M4.121 4.121C2.18 6 1 8 1 12c0 0 3.5 7 11 7 2.321 0 4.285-.54 5.858-1.363M9.882 4.123C10.566 4.041 11.27 4 12 4c7 0 11 7 11 7-.527 1.054-1.227 2.248-2.155 3.378"/>
+      </svg>
+    </span>
+  </div>
+</div>
+
+
+        <button type="submit" class="login-btn" id="loginBtn">
+          <span id="btnText">Sign In</span>
+          <span class="spinner hidden" id="spinner"></span>
+        </button>
+
+        <div class="error-message" id="errorMessage">
+          ❌ Invalid username or password
+        </div>
+      </form>
+
+      <div class="footer-text">
+        © 2025 AMCAR Automotive. All rights reserved.
+      </div>
+    </div>
 
     <script>
-      async function login() {
-        const data = {
-          username: document.getElementById("username").value.trim(),
-          password: document.getElementById("password").value.trim(),
-        };
+      async function login(event) {
+        event.preventDefault();
+        
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const loginBtn = document.getElementById("loginBtn");
+        const btnText = document.getElementById("btnText");
+        const spinner = document.getElementById("spinner");
+        const errorMessage = document.getElementById("errorMessage");
 
-        const res = await fetch("/api/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
+        // Hide error message
+        errorMessage.classList.remove("show");
 
-        const result = await res.json();
+        // Show loading state
+        loginBtn.disabled = true;
+        btnText.textContent = "Signing in";
+        spinner.classList.remove("hidden");
 
-        if (result.success) {
-          localStorage.setItem("user", result.user);
-          window.location.href = "index.html";
-        } else {
-          alert("❌ Invalid username or password");
+        try {
+          const res = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          });
+
+          const result = await res.json();
+
+          if (result.success) {
+            localStorage.setItem("user", result.user);
+            btnText.textContent = "Success!";
+            
+            // Redirect after short delay
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 500);
+          } else {
+            // Show error
+            errorMessage.classList.add("show");
+            resetButton();
+          }
+        } catch (error) {
+          errorMessage.textContent = "❌ Connection error. Please try again.";
+          errorMessage.classList.add("show");
+          resetButton();
         }
       }
+
+      function resetButton() {
+        const loginBtn = document.getElementById("loginBtn");
+        const btnText = document.getElementById("btnText");
+        const spinner = document.getElementById("spinner");
+
+        loginBtn.disabled = false;
+        btnText.textContent = "Sign In";
+        spinner.classList.add("hidden");
+      }
+
+      // Allow Enter key to submit
+      document.getElementById("password").addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          login(e);
+        }
+      });
     </script>
+    <script>
+  const password = document.getElementById("password");
+  const togglePassword = document.getElementById("togglePassword");
+  const eyeOpen = document.getElementById("eyeOpen");
+  const eyeClosed = document.getElementById("eyeClosed");
+
+  togglePassword.addEventListener("click", () => {
+    const isHidden = password.type === "password";
+
+    password.type = isHidden ? "text" : "password";
+    eyeOpen.style.display = isHidden ? "none" : "";
+    eyeClosed.style.display = isHidden ? "" : "none";
+  });
+</script>
+
   </body>
 </html>

@@ -2,32 +2,11 @@
 <html>
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-
-    <title>AMCAR Inventory MVP</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body {
-        font-family: Arial;
-        padding: 20px;
-      }
-      #preview {
-        max-width: 250px;
-        margin-top: 10px;
-        display: none;
-      }
-      #resultBox,
-      #formBox {
-        display: none;
-        margin-top: 20px;
-      }
-      input,
-      button {
-        padding: 10px;
-        width: 100%;
-        margin-top: 10px;
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
+    <title>AMCAR Inventory System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   </head>
+
   <script>
     const user = localStorage.getItem("user");
     if (!user) {
@@ -36,65 +15,321 @@
   </script>
 
   <body>
-    <h2>📦 AMCAR Inventory Scanner</h2>
+    <!-- Modal -->
+    <div id="amcarModal" class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-header" id="modalTitle">AMCAR Automotive Inventory System</div>
+        <div class="modal-body" id="modalMessage"></div>
+        <button onclick="closeModal()" class="modal-button">OK</button>
+      </div>
+    </div>
 
-    <label>Take or upload a barcode image:</label>
-    <input
-      type="file"
-      accept="image/*"
-      capture="environment"
-      id="barcodeInput"
-    />
+    <!-- Header -->
+    <div class="header">
+      <div class="header-title">
+        <span>AMCAR Automotive Inventory</span>
+      </div>
+      <div class="header-info">
+        <div class="info-badge user-badge">
+          <span class="badge-label">User:</span>
+          <span class="badge-value" id="usernameDisplay"></span>
+        </div>
+        <div class="info-badge part-badge">
+          <span class="badge-label">Last Part:</span>
+          <span class="badge-value" id="lastPartDisplay">None</span>
+        </div>
+      </div>
+    </div>
 
-    <img id="preview" />
-
-    <h3>Manual Barcode Entry (for unreadable barcodes)</h3>
-    <input
-      type="text"
-      id="manualCodeInput"
-      placeholder="Enter Part Code Manually"
-    />
-
-    <button onclick="useManualCode()">Use Manual Code</button>
-
-    <div id="resultBox">
-      <div style="display: none">
-        <p
-          id="decodedText"
-          style="font-size: 20px; font-weight: bold; color: #007bff"
-        ></p>
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Camera Section -->
+      <div class="section">
+        <div class="section-title">Scan Barcode</div>
+        <div class="camera-input-wrapper">
+          <label class="camera-btn" for="barcodeInput">
+            <span class="camera-icon">+</span>
+            Scan / Upload Barcode
+          </label>
+          <input type="file" accept="image/*" id="barcodeInput" capture="environment" style="display:none;" />
+        </div>
+        <img id="preview" />
       </div>
 
-      <h3>Part Code:</h3>
-      <p
-        id="codeField"
-        style="font-size: 20px; font-weight: bold; color: #007bff"
-      ></p>
+      <!-- Manual Entry Section -->
+      <div class="section">
+        <div class="section-title">Manual Entry</div>
+        <input type="text" id="manualCodeInput" placeholder="Enter Part Code" />
+        <button onclick="useManualCode()">Submit Part Code</button>
+      </div>
 
-      <h3>Part Description:</h3>
-      <p
-        id="description"
-        style="font-size: 20px; font-weight: bold; color: #007bff"
-      ></p>
+      <!-- Result Section -->
+      <div class="section result-section" id="resultBox">
+        <div class="section-title">Scanned Part</div>
+        <div class="hidden" id="decodedText"></div>
+        <div class="result-item">
+          <div class="result-label">Part Code</div>
+          <div class="result-value" id="codeField"></div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Description</div>
+          <div class="result-value" id="description"></div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">MMPC Part</div>
+          <div class="result-value" id="mmpcField"></div>
+        </div>
+      </div>
 
-      <h3>MMPC Part</h3>
-      <p
-        id="mmpcField"
-        style="font-size: 20px; font-weight: bold; color: #007bff"
-      ></p>
+      <!-- Form Section -->
+      <div class="section form-section" id="formBox">
+        <div class="section-title">Add Details</div>
+        <label>Quantity</label>
+        <input type="number" id="quantity" placeholder="Enter quantity" />
+        <label>Location</label>
+        <input type="text" id="location" placeholder="Enter location" />
+        <button onclick="submitForm()">Save to Database</button>
+      </div>
+
+      <!-- Download Section (Admin Only) -->
+      <div class="section download-section" id="downloadSection" style="display: none;">
+        <button class="secondary" onclick="downloadCSV()">⬇️ Download CSV Export</button>
+      </div>
+
+      <!-- Logout Section -->
+      <div class="logout-section">
+        <button class="logout-btn-bottom" onclick="logout()">Sign Out</button>
+      </div>
     </div>
 
-    <div id="formBox">
-      <label>Quantity</label>
-      <input type="number" id="quantity" />
-
-      <label>Location</label>
-      <input type="text" id="location" />
-
-      <button onclick="submitForm()">Save to CSV</button>
-    </div>
-
-    <button onclick="downloadCSV()">Download CSV</button>
     <script src="script.js"></script>
+    <script>
+      /* =============================
+         MODAL FUNCTIONS (Option B)
+      ============================== */
+      function showModal(message, type = "error") {
+        const modal = document.getElementById("amcarModal");
+        document.getElementById("modalMessage").innerText = message;
+        document.getElementById("modalTitle").style.color =
+          type === "success" ? "#4bff4b" : "#ff4b4b";
+        modal.style.display = "flex";
+
+        // Disable ESC closing
+        document.body.onkeydown = function(event) {
+          if (event.key === "Escape") {
+            event.preventDefault();
+          }
+        };
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("amcarModal");
+        modal.style.display = "none";
+
+        // Re-enable ESC key
+        document.body.onkeydown = null;
+
+        // Option B: reload page after user clicks OK
+        location.reload();
+      }
+    </script>
+
+    <script>
+      /* =============================
+         USER + LAST PART DISPLAY
+      ============================== */
+      const userDisplay = localStorage.getItem("user");
+
+      if (userDisplay) {
+        document.getElementById("usernameDisplay").innerText = userDisplay;
+      }
+
+      if (userDisplay && userDisplay.trim().toLowerCase() === "admin") {
+        document.getElementById("downloadSection").style.display = "block";
+      }
+
+      const savedLastPart = localStorage.getItem("lastPartNumber");
+      if (savedLastPart) {
+        document.getElementById("lastPartDisplay").innerText = savedLastPart;
+      }
+
+      function updateLastPart(part) {
+        document.getElementById("lastPartDisplay").innerText = part;
+        localStorage.setItem("lastPartNumber", part);
+      }
+
+      function logout() {
+        localStorage.removeItem("user");
+        localStorage.removeItem("lastPartNumber");
+        window.location.href = "login.html";
+      }
+    </script>
+
+    <script>
+      /* =============================
+         PARTS DATA + BARCODE HANDLING
+      ============================== */
+      let partsData = [];
+
+      async function loadParts() {
+        try {
+          const response = await fetch("/api/parts");
+          partsData = await response.json();
+          console.log("Parts loaded:", partsData);
+        } catch (error) {
+          console.error("Error loading parts:", error);
+        }
+      }
+      loadParts();
+
+      document.getElementById("barcodeInput").addEventListener("change", handleImageUpload);
+
+      async function handleImageUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const preview = document.getElementById("preview");
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+
+        const processedBlob = await preprocessImage(file);
+
+        let barcode;
+        try {
+          barcode = await decodeImage(processedBlob);
+        } catch (err) {
+          showModal("❌ Barcode could not be read.");
+          console.log(err);
+          return;
+        }
+
+        document.getElementById("decodedText").textContent = barcode;
+        document.getElementById("codeField").textContent = barcode;
+
+        const part = partsData.find(p => p.code === barcode);
+
+        if (!part) {
+          showModal("❌ Unknown part code — not in database.");
+          return;
+        }
+
+        document.getElementById("description").textContent = part.description;
+        document.getElementById("mmpcField").textContent = part.mmpcPart || "No";
+
+        updateLastPart(barcode);
+
+        document.getElementById("resultBox").style.display = "block";
+        document.getElementById("formBox").style.display = "block";
+      }
+
+      async function preprocessImage(file) {
+        const img = await createImageBitmap(file);
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const MAX = 800;
+        const scale = Math.min(MAX / img.width, MAX / img.height);
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        return await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+      }
+
+      function decodeImage(buffer) {
+        return new Promise((resolve, reject) => {
+          Quagga.decodeSingle({
+            src: URL.createObjectURL(buffer),
+            numOfWorkers: 0,
+            locate: true,
+            inputStream: { size: 800 },
+            decoder: {
+              readers: [
+                "code_128_reader",
+                "code_39_reader",
+                "code_93_reader",
+                "ean_reader",
+                "ean_8_reader",
+                "upc_reader"
+              ]
+            }
+          }, result => {
+            if (result && result.codeResult) {
+              resolve(result.codeResult.code);
+            } else {
+              reject("No barcode detected");
+            }
+          });
+        });
+      }
+
+      async function submitForm() {
+        const user = localStorage.getItem("user");
+        const currentPartCode = document.getElementById("decodedText").textContent;
+
+        const data = {
+          code: currentPartCode,
+          description: document.getElementById("description").textContent,
+          quantity: document.getElementById("quantity").value,
+          location: document.getElementById("location").value,
+          mmpcPart: document.getElementById("mmpcField").textContent,
+          encodedBy: user
+        };
+
+        const res = await fetch("/api/scan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          localStorage.setItem("lastPartNumber", currentPartCode);
+          showModal("✅ Saved to local database!", "success");
+        } else {
+          showModal("❌ Error saving.", "error");
+        }
+      }
+
+      function downloadCSV() {
+        window.location.href = "/api/export-csv";
+      }
+
+      /* =============================
+         MANUAL ENTRY
+      ============================== */
+      function updateDescriptionFromCode(code) {
+        const descDisplay = document.getElementById("description");
+        if (!partsData.length) {
+          descDisplay.textContent = "Parts not loaded yet";
+          return;
+        }
+
+        const part = partsData.find(p => p.code === code);
+        if (part) {
+          descDisplay.textContent = part.description;
+          document.getElementById("mmpcField").textContent = part.mmpcPart || "No";
+        } else {
+          showModal("❌ Unknown part code — not in database.");
+        }
+      }
+
+      function useManualCode() {
+        const manualCode = document.getElementById("manualCodeInput").value.trim();
+        if (!manualCode) {
+          showModal("⚠️ Please enter a part code.");
+          return;
+        }
+
+        document.getElementById("decodedText").textContent = manualCode;
+        document.getElementById("codeField").textContent = manualCode;
+
+        updateDescriptionFromCode(manualCode);
+        updateLastPart(manualCode);
+
+        document.getElementById("resultBox").style.display = "block";
+        document.getElementById("formBox").style.display = "block";
+        document.getElementById("preview").style.display = "none";
+      }
+    </script>
   </body>
 </html>

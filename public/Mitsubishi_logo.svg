@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+	"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Notepad -->
+<!-- (PD) January 26, 2006 - _Crotalus horridus_  -->
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.0"
+   width="500"
+   height="430"
+   id="Mitsubishi_logo">
+  <path
+     fill="#E20048"
+     stroke="none"
+     d="M 248,6   L 330,145 L 248,284 L 166,146 Z
+        M 248,284 H 408     L 488,420 H 328     Z
+        M 248,284 H 88      L 8,420   H 168     Z"
+  />
+</svg>
