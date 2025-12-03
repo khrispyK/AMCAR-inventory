@@ -219,5 +219,159 @@
     "mmpcPart": "Yes",
     "encodedBy": "kaira",
     "timestamp": "2025-12-01T07:38:33.501Z"
+  },
+  {
+    "code": "#8",
+    "description": "",
+    "quantity": 232323,
+    "location": "sjefjkshjkhsf",
+    "mmpcPart": "No",
+    "encodedBy": "UNKNOWN",
+    "timestamp": "2025-12-02T08:01:54.514Z"
+  },
+  {
+    "code": "#06",
+    "description": "",
+    "quantity": 34,
+    "location": "rm4",
+    "mmpcPart": "No",
+    "encodedBy": "UNKNOWN",
+    "timestamp": "2025-12-03T00:41:12.813Z"
+  },
+  {
+    "code": "#10",
+    "description": "",
+    "quantity": 50,
+    "location": "Rm3",
+    "mmpcPart": "No",
+    "encodedBy": "UNKNOWN",
+    "timestamp": "2025-12-03T00:45:32.141Z"
+  },
+  {
+    "code": "0-160LB",
+    "description": "",
+    "quantity": 56,
+    "location": "LG",
+    "mmpcPart": "No",
+    "encodedBy": "UNKNOWN",
+    "timestamp": "2025-12-03T01:09:44.317Z"
+  },
+  {
+    "code": "#8",
+    "description": "",
+    "quantity": 34343,
+    "location": "fdfdfd",
+    "mmpcPart": "No",
+    "encodedBy": "UNKNOWN",
+    "timestamp": "2025-12-03T02:04:58.151Z"
+  },
+  {
+    "code": "#10",
+    "description": "",
+    "quantity": 777,
+    "location": "rm1",
+    "mmpcPart": "No",
+    "encodedBy": "UNKNOWN",
+    "timestamp": "2025-12-03T02:24:03.274Z"
+  },
+  {
+    "code": "39",
+    "description": "BOSCH HORN",
+    "quantity": 236,
+    "location": "Room2",
+    "mmpcPart": "No",
+    "encodedBy": "kaira",
+    "timestamp": "2025-12-03T03:05:31.821Z"
+  },
+  {
+    "code": "98798797",
+    "description": "wheel",
+    "quantity": 22222,
+    "location": "rm2",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "timestamp": "2025-12-03T03:07:05.267Z"
+  },
+  {
+    "code": "#8",
+    "description": "",
+    "quantity": 56,
+    "location": "Ffjhyy",
+    "mmpcPart": "No",
+    "encodedBy": "UNKNOWN",
+    "timestamp": "2025-12-03T03:22:14.938Z"
+  },
+  {
+    "code": "637276",
+    "description": "Manibela",
+    "quantity": 24846,
+    "location": "Rm2",
+    "mmpcPart": "Yes",
+    "encodedBy": "kaira",
+    "timestamp": "2025-12-03T03:37:33.391Z"
+  },
+  {
+    "code": "73737373",
+    "description": "Jdvsish",
+    "quantity": 33333,
+    "location": "rm 4",
+    "mmpcPart": "Yes",
+    "encodedBy": "kaira",
+    "timestamp": "2025-12-03T03:44:35.959Z"
+  },
+  {
+    "code": "7362572",
+    "description": "Rug",
+    "quantity": 6598656,
+    "location": "Rm 0",
+    "mmpcPart": "No",
+    "encodedBy": "kaira",
+    "reason": "Camera not working",
+    "manual": true,
+    "timestamp": "2025-12-03T03:46:26.346Z"
+  },
+  {
+    "code": "",
+    "description": "klsjdfklsf",
+    "quantity": 234444,
+    "location": "rm1",
+    "mmpcPart": "Yes",
+    "encodedBy": "admin",
+    "reason": "Camera not working",
+    "manual": true,
+    "timestamp": "2025-12-03T05:52:42.869Z"
+  },
+  {
+    "code": "#8",
+    "description": "",
+    "quantity": 12,
+    "location": "rm1",
+    "mmpcPart": "No",
+    "encodedBy": "UNKNOWN",
+    "reason": "",
+    "manual": false,
+    "timestamp": "2025-12-03T05:53:55.447Z"
+  },
+  {
+    "code": "#06",
+    "description": "",
+    "quantity": 1111,
+    "location": "111",
+    "mmpcPart": "No",
+    "encodedBy": "UNKNOWN",
+    "reason": "",
+    "manual": false,
+    "timestamp": "2025-12-03T05:54:33.840Z"
+  },
+  {
+    "code": "#8",
+    "description": "WIRE AUTO",
+    "quantity": 1234,
+    "location": "room 2",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-03T06:46:26.772Z"
   }
 ]

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Manual Entry - AMCAR</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+
+  <script>
+    // Require login
+    const user = localStorage.getItem("user");
+    if (!user) window.location.href = "login.html";
+  </script>
+
+  <body>
+    <div class="header">
+      <div class="header-title">Manual Entry</div>
+      <div class="header-info">
+        <button onclick="history.back()" class="secondary">⬅ Back</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="section">
+        <label>Part Code</label>
+        <input type="text" id="manualCode" />
+      </div>
+
+      <div class="section">
+        <label>Part Description</label>
+        <input type="text" id="manualDesc" />
+      </div>
+
+      <div class="section">
+        <label>MMPC Part?</label>
+        <select id="manualMMPC">
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <label>Quantity</label>
+        <input type="number" id="manualQty" />
+      </div>
+
+      <div class="section">
+        <label>Location</label>
+        <input type="text" id="manualLocation" />
+      </div>
+
+      <div class="section">
+        <label>Reason for Manual Encoding</label>
+        <select id="manualReason" onchange="toggleOtherReason()">
+          <option value="">Select a reason</option>
+          <option value="Barcode damaged">Barcode damaged</option>
+          <option value="Camera not working">Camera not working</option>
+          <option value="System could not read barcode">
+            System could not read barcode
+          </option>
+          <option value="Item unlabelled">Item unlabelled</option>
+          <option value="Other">Other (specify)</option>
+        </select>
+
+        <input
+          type="text"
+          id="otherReason"
+          placeholder="Type reason…"
+          style="display: none; margin-top: 10px"
+        />
+      </div>
+
+      <button onclick="saveManualEntry()">Save Entry</button>
+    </div>
+
+    <script>
+      function toggleOtherReason() {
+        const dropdown = document.getElementById("manualReason");
+        const other = document.getElementById("otherReason");
+        other.style.display = dropdown.value === "Other" ? "block" : "none";
+      }
+
+      function saveManualEntry() {
+        const code = document.getElementById("manualCode").value.trim();
+        const desc = document.getElementById("manualDesc").value.trim();
+        const mmpc = document.getElementById("manualMMPC").value;
+        const qty = document.getElementById("manualQty").value.trim();
+        const location = document.getElementById("manualLocation").value.trim();
+
+        let reason = document.getElementById("manualReason").value;
+        if (reason === "Other") {
+          reason = document.getElementById("otherReason").value.trim();
+        }
+
+        // if (!code || !desc || !qty || !location || !reason) {
+        //   alert("Please complete all fields.");
+        //   return;
+        // }
+
+        const row = `${code},${desc},${mmpc},${qty},${location},${reason}\n`;
+
+        let csv =
+          localStorage.getItem("csvDataManual") ||
+          "Part Code,Description,MMPC Part,Quantity,Location,Reason\n";
+
+        csv += row;
+        localStorage.setItem("csvDataManual", csv);
+
+        alert("Manual entry saved!");
+        history.back();
+      }
+
+      async function saveManualEntry() {
+        const code = document.getElementById("manualCode").value.trim();
+        const desc = document.getElementById("manualDesc").value.trim();
+        const mmpc = document.getElementById("manualMMPC").value;
+        const qty = document.getElementById("manualQty").value.trim();
+        const location = document.getElementById("manualLocation").value.trim();
+
+        let reason = document.getElementById("manualReason").value;
+        if (reason === "Other") {
+          reason = document.getElementById("otherReason").value.trim();
+        }
+
+        const payload = {
+          code,
+          description: desc,
+          quantity: qty,
+          location,
+          mmpcPart: mmpc,
+          encodedBy: localStorage.getItem("user") || "UNKNOWN",
+          reason: reason, // ← THIS IS THE CORRECT LINE
+          manual: true, // ← NEW (so we know it was manually encoded)
+        };
+
+        try {
+          const res = await fetch("/api/scan", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            alert("Manual entry saved! ✅");
+            history.back();
+          } else {
+            alert("❌ Error: " + data.message);
+          }
+        } catch (err) {
+          alert("❌ Server error: " + err.message);
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -5,6 +5,7 @@ import fs from "fs-extra";
 import path from "path";
 import { fileURLToPath } from "url";
 
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -40,21 +41,25 @@ async function saveDB() {
 
 // API endpoint to save scan
 app.post("/api/scan", async (req, res) => {
-    const { code, description, quantity, location, encodedBy, mmpcPart } = req.body;
+    const { code, description, quantity, location, encodedBy, mmpcPart, reason, manual } = req.body;
 
-    if (!code) {
+    // Only block missing code for SCANNED entries
+    if (!manual && !code) {
         return res.json({ success: false, message: "No barcode detected." });
     }
 
+
     const entry = {
-        code,
+        code: code || "",
         description: description || "",
         quantity: Number(quantity) || 0,
         location: location || "",
-        mmpcPart: mmpcPart || "No",   // DEFAULT = No
+        mmpcPart: mmpcPart || "No",
         encodedBy: encodedBy || "UNKNOWN",
+        reason: req.body.reason || "",
+        manual: req.body.manual === true,
         timestamp: new Date().toISOString()
-    };
+    };    
 
     scans.push(entry);
     await saveDB();
@@ -81,11 +86,11 @@ app.get("/api/export-csv", async (req, res) => {
   }
 
   // CSV headers
-  let csv = "code,description,quantity,location,mmpcPart,timestamp,encodedBy\n";
+  let csv = "code,description,quantity,location,mmpcPart,reason,timestamp,encodedBy\n";
 
 
 scans.forEach(s => {
-    csv += `${s.code},${s.description || ""},${s.quantity},${s.location},${s.mmpcPart || "No"},${s.timestamp},${s.encodedBy}\n`;
+    csv += `${s.code},${s.description || ""},${s.quantity},${s.location},${s.mmpcPart || "No"},${s.reason || ""},${s.timestamp},${s.encodedBy}\n`;
 });
 
 
