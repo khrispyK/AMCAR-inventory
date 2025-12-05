@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin Table - AMCAR Inventory</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+
+  <body>
+    <script>
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user || user.role !== "ADMIN") {
+        window.location.href = "login.html";
+      }
+    </script>
+
+    <div class="header">
+      <div class="header-title">Admin — Inventory Table</div>
+      <button class="logout-btn-bottom" onclick="logout()">Sign Out</button>
+    </div>
+
+    <div class="content">
+      <div class="section">
+        <div class="section-title">Real-Time Inventory Data</div>
+
+        <table id="dataTable" class="clean-table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Description</th>
+              <th>MMPC</th>
+              <th>Qty</th>
+              <th>Location</th>
+              <th>Encoded By</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Back Button -->
+      <button class="secondary" onclick="window.location.href='index.html'">
+        ⬅️ Back to Scanner
+      </button>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="table.js"></script>
+  </body>
+</html>

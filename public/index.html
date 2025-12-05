@@ -10,14 +10,21 @@
     />
   </head>
 
-  <script>
-    const user = localStorage.getItem("user");
-    if (!user) {
-      window.location.href = "login.html";
-    }
-  </script>
-
   <body>
+    <script>
+      const userData = JSON.parse(localStorage.getItem("user"));
+      if (!userData) window.location.href = "login.html";
+
+      window.onload = () => {
+        document.getElementById("usernameDisplay").textContent =
+          userData.username;
+
+        if (userData.role === "ADMIN") {
+          document.getElementById("downloadSection").style.display = "block";
+        }
+      };
+    </script>
+
     <!-- Modal -->
     <div id="amcarModal" class="modal-overlay">
       <div class="modal-box">
@@ -119,6 +126,9 @@
       >
         <button class="secondary" onclick="downloadCSV()">
           ⬇️ Download CSV Export
+        </button>
+        <button class="secondary" onclick="window.location.href='table.html'">
+          📋 View Table
         </button>
       </div>
 

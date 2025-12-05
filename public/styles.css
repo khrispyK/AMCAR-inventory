@@ -355,4 +355,64 @@ button.secondary:active {
   }
 }
 
+.clean-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
 
+.clean-table th, .clean-table td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.clean-table input {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.table-btn {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.table-btn.edit {
+  background: #60a5fa;
+  color: white;
+}
+
+.table-btn.delete {
+  background: #ef4444;
+  color: white;
+}
+
+/* Table text fix */
+.clean-table th,
+.clean-table td input {
+  color: #ffffff !important;   /* force text to be white */
+}
+
+/* Table header */
+.clean-table th {
+  font-weight: bold;
+  color: #ff4d4d; /* or white if you prefer */
+}
+
+/* Table row background */
+.clean-table tr {
+  background-color: #1a1a1a;
+}
+
+/* Inputs inside the table */
+.clean-table td input {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  padding: 6px;
+  border-radius: 6px;
+}

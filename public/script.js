@@ -1,3 +1,5 @@
+
+
 /* =============================
          MODAL FUNCTIONS (Option B)
       ============================== */
@@ -283,6 +285,10 @@ let isManual = false;
             console.error(error);
         }
     }
+
+    async function loadTable() {
+      const response = await fetch("/api/scans");
+      const data = await response.json();
+      renderTable(data);
+    }
     
-
-

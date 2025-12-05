@@ -142,3 +142,32 @@ app.get("/api/lookup/:code", (req, res) => {
         mmpcPart: part.mmpcPart || "No"
     });
 });
+
+app.put("/api/scans/:index", async (req, res) => {
+    const index = Number(req.params.index);
+    if (index < 0 || index >= scans.length) {
+        return res.status(400).json({ success: false, message: "Invalid index" });
+    }
+
+    scans[index] = {
+        ...scans[index],
+        ...req.body,    // overwrite fields with edited ones
+    };
+
+    await saveDB();
+    res.json({ success: true });
+});
+
+app.delete("/api/scans/:index", async (req, res) => {
+    const index = Number(req.params.index);
+
+    if (index < 0 || index >= scans.length) {
+        return res.status(400).json({ success: false, message: "Invalid index" });
+    }
+
+    scans.splice(index, 1);
+    await saveDB();
+
+    res.json({ success: true });
+});
+
