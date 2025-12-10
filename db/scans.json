@@ -433,5 +433,16 @@
     "reason": "",
     "manual": true,
     "timestamp": "2025-12-05T08:16:23.398Z"
+  },
+  {
+    "code": "34",
+    "description": "test",
+    "quantity": 1,
+    "location": "r2",
+    "mmpcPart": "Yes",
+    "encodedBy": "admin",
+    "reason": "Barcode damaged",
+    "manual": true,
+    "timestamp": "2025-12-09T01:35:37.087Z"
   }
 ]

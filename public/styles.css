@@ -16,6 +16,11 @@ body {
   padding-bottom: 40px;
 }
 
+.section, .header {
+  position: relative;
+  z-index: 1;
+}
+
 /* Smooth fade */
 .section, .header, button, input {
   transition: 0.25s ease;
@@ -50,7 +55,7 @@ body {
 }
 
 /* =============================
-   MINI
+   MINI BADGES
 ============================= */
 .info-badge {
   flex: 1;
@@ -62,8 +67,9 @@ body {
   flex-direction: column;
   gap: 1px;
   backdrop-filter: blur(8px);
-  box-shadow: 0 0 10px rgba(255,0,0,0.15),
-              inset 0 0 8px rgba(255,0,0,0.25);
+  box-shadow: 
+    0 0 10px rgba(255,0,0,0.15),
+    inset 0 0 8px rgba(255,0,0,0.25);
 }
 
 .badge-label {
@@ -186,9 +192,8 @@ label {
 }
 
 /* =============================
-   AMCAR MODAL SYSTEM
+   MODAL SYSTEM
 ============================= */
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -199,9 +204,10 @@ label {
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 999999 !important;
-  pointer-events: auto; /* block all clicks behind */
+  pointer-events: auto;
   backdrop-filter: blur(5px);
+  isolation: isolate;
+  transform: translateZ(0);
 }
 
 .modal-box {
@@ -252,7 +258,6 @@ label {
   from {opacity: 0; transform: scale(0.9);}
   to   {opacity: 1; transform: scale(1);}
 }
-
 
 /* =============================
    BUTTONS 
@@ -355,13 +360,17 @@ button.secondary:active {
   }
 }
 
+/* =============================
+   CLEAN TABLE
+============================= */
 .clean-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
 }
 
-.clean-table th, .clean-table td {
+.clean-table th, 
+.clean-table td {
   border-bottom: 1px solid #ddd;
   padding: 10px;
   text-align: left;
@@ -374,6 +383,7 @@ button.secondary:active {
   border-radius: 6px;
 }
 
+/* Buttons inside table */
 .table-btn {
   border: none;
   padding: 6px 10px;
@@ -395,13 +405,13 @@ button.secondary:active {
 /* Table text fix */
 .clean-table th,
 .clean-table td input {
-  color: #ffffff !important;   /* force text to be white */
+  color: #ffffff !important;
 }
 
 /* Table header */
 .clean-table th {
   font-weight: bold;
-  color: #ff4d4d; /* or white if you prefer */
+  color: #ff4d4d;
 }
 
 /* Table row background */
@@ -409,10 +419,11 @@ button.secondary:active {
   background-color: #1a1a1a;
 }
 
-/* Inputs inside the table */
+/* Inputs inside table cells */
 .clean-table td input {
-  background-color: #2a2a2a;
-  border: 1px solid #444;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
   padding: 6px;
   border-radius: 6px;
 }

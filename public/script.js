@@ -210,53 +210,53 @@ let isManual = false;
       /* =============================
          MANUAL ENTRY
       ============================== */
-      function updateDescriptionFromCode(code) {
-        const descDisplay = document.getElementById("description");
-        if (!partsData.length) {
-          descDisplay.textContent = "Parts not loaded yet";
-          return;
-        }
+    //   function updateDescriptionFromCode(code) {
+    //     const descDisplay = document.getElementById("description");
+    //     if (!partsData.length) {
+    //       descDisplay.textContent = "Parts not loaded yet";
+    //       return;
+    //     }
 
-        const part = partsData.find((p) => p.code === code);
-        if (part) {
-          descDisplay.textContent = part.description;
-          document.getElementById("mmpcField").textContent =
-            part.mmpcPart || "No";
-        } else {
-          showModal("❌ Unknown part code — not in database.");
-        }
-      }
+    //     const part = partsData.find((p) => p.code === code);
+    //     if (part) {
+    //       descDisplay.textContent = part.description;
+    //       document.getElementById("mmpcField").textContent =
+    //         part.mmpcPart || "No";
+    //     } else {
+    //       showModal("❌ Unknown part code — not in database.");
+    //     }
+    //   }
 
-      function useManualCode() {
-        const manualCode = document.getElementById("manualCodeInput").value.trim();
-        if (!manualCode) {
-          showModal("⚠️ Please enter a part code.");
-          return;
-        }
+    //   function useManualCode() {
+    //     const manualCode = document.getElementById("manualCodeInput").value.trim();
+    //     if (!manualCode) {
+    //       showModal("⚠️ Please enter a part code.");
+    //       return;
+    //     }
       
-        const part = partsData.find(p => p.code === manualCode);
+    //     const part = partsData.find(p => p.code === manualCode);
       
-        if (!part) {
-          showModal("❌ Unknown part code — not in database.");
-          return;
-        }
+    //     if (!part) {
+    //       showModal("❌ Unknown part code — not in database.");
+    //       return;
+    //     }
       
-        // ⭐ Set GLOBAL values
-        currentCode = manualCode;
-        currentDescription = part.description;
-        currentMMPCPart = part.mmpcPart || "No";
-        isManual = true;
+    //     // ⭐ Set GLOBAL values
+    //     currentCode = manualCode;
+    //     currentDescription = part.description;
+    //     currentMMPCPart = part.mmpcPart || "No";
+    //     isManual = true;
       
-        // Render to UI
-        document.getElementById("decodedText").textContent = manualCode;
-        document.getElementById("codeField").textContent = manualCode;
-        document.getElementById("description").textContent = currentDescription;
-        document.getElementById("mmpcField").textContent = currentMMPCPart;
+    //     // Render to UI
+    //     document.getElementById("decodedText").textContent = manualCode;
+    //     document.getElementById("codeField").textContent = manualCode;
+    //     document.getElementById("description").textContent = currentDescription;
+    //     document.getElementById("mmpcField").textContent = currentMMPCPart;
       
-        document.getElementById("resultBox").style.display = "block";
-        document.getElementById("formBox").style.display = "block";
-        document.getElementById("preview").style.display = "none";
-      }
+    //     document.getElementById("resultBox").style.display = "block";
+    //     document.getElementById("formBox").style.display = "block";
+    //     document.getElementById("preview").style.display = "none";
+    //   }
       
 
       async function downloadCSV() {
@@ -286,9 +286,64 @@ let isManual = false;
         }
     }
 
-    async function loadTable() {
-      const response = await fetch("/api/scans");
-      const data = await response.json();
-      renderTable(data);
+    /* =============================
+   LIVE MANUAL ENTRY SEARCH
+============================= */
+
+const manualInput = document.getElementById("manualCodeInput");
+const suggestionsBox = document.getElementById("suggestionsBox");
+
+manualInput.addEventListener("input", () => {
+    const query = manualInput.value.trim().toLowerCase();
+
+    if (!query) {
+        suggestionsBox.style.display = "none";
+        return;
     }
-    
+
+    // Filter matches
+    const results = partsData.filter(p => 
+        p.code.toLowerCase().includes(query)
+    );
+
+    // Build suggestions
+    if (results.length > 0) {
+        suggestionsBox.innerHTML = results
+            .map(r => `<div data-code="${r.code}">${r.code} — ${r.description}</div>`)
+            .join("");
+
+        suggestionsBox.style.display = "block";
+    } else {
+        suggestionsBox.style.display = "none";
+    }
+});
+
+// When clicking a suggestion
+suggestionsBox.addEventListener("click", (e) => {
+    const selected = e.target.getAttribute("data-code");
+    if (!selected) return;
+
+    const part = partsData.find(p => p.code === selected);
+
+    // update globals
+    currentCode = part.code;
+    currentDescription = part.description;
+    currentMMPCPart = part.mmpcPart || "No";
+    isManual = true;
+
+    // Fill input
+    manualInput.value = part.code;
+
+    // Render UI
+    document.getElementById("decodedText").textContent = part.code;
+    document.getElementById("codeField").textContent = part.code;
+    document.getElementById("description").textContent = part.description;
+    document.getElementById("mmpcField").textContent = currentMMPCPart;
+
+    // Show result boxes
+    document.getElementById("resultBox").style.display = "block";
+    document.getElementById("formBox").style.display = "block";
+
+    // Hide suggestions
+    suggestionsBox.style.display = "none";
+});

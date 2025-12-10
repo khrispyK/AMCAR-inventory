@@ -86,8 +86,13 @@
       <!-- Manual Entry Section -->
       <div class="section">
         <div class="section-title">Manual Entry</div>
-        <input type="text" id="manualCodeInput" placeholder="Enter Part Code" />
-        <button onclick="useManualCode()">Submit Part Code</button>
+        <input
+          type="text"
+          id="manualCodeInput"
+          placeholder="Enter Part Code"
+          autocomplete="off"
+        />
+        <div id="suggestionsBox" class="suggestions-box"></div>
       </div>
 
       <!-- Result Section -->
