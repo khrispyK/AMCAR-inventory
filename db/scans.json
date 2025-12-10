@@ -511,5 +511,203 @@
     "reason": "",
     "manual": true,
     "timestamp": "2025-12-10T06:51:04.210Z"
+  },
+  {
+    "code": "01MISC",
+    "description": "MISCELLANEOUS",
+    "quantity": 23,
+    "location": "dfdfdf",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T06:55:48.174Z"
+  },
+  {
+    "code": "0K30A-37390S",
+    "description": "INSULATOR FR SUSP STRUT",
+    "quantity": 23,
+    "location": "jsafjh",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T06:59:54.537Z"
+  },
+  {
+    "code": "185/R14GYG26",
+    "description": "TIRE GOOD YEAR G26",
+    "quantity": 565,
+    "location": "gfghfhgf",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T07:02:12.018Z"
+  },
+  {
+    "code": "FB WSTRIP",
+    "description": "L300 FB GLASS WEATHERSTRIP",
+    "quantity": 767,
+    "location": "kjhskjwhs",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T07:04:01.060Z"
+  },
+  {
+    "code": "04631-SNA-A0",
+    "description": "SIDE SILL PANEL RH",
+    "quantity": 232,
+    "location": "scdbmsdbc",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T07:07:26.326Z"
+  },
+  {
+    "code": "sjdhkjhdjksh",
+    "description": "dkjhsdkjhkjsdhf",
+    "quantity": 6767,
+    "location": "jshdcjhkjshdc",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "Barcode damaged",
+    "manual": true,
+    "timestamp": "2025-12-10T07:07:55.963Z"
+  },
+  {
+    "code": " 6121A540",
+    "description": "GLASS QTR WINDOW RH",
+    "quantity": 65656,
+    "location": "bawal",
+    "mmpcPart": "Yes",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T07:10:49.563Z"
+  },
+  {
+    "code": "0K60A-58-210",
+    "description": "HINGE ASSY DOOR UPPER",
+    "quantity": 23,
+    "location": "akdjlkjad",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T07:15:50.024Z"
+  },
+  {
+    "code": "11210-0M600Y",
+    "description": "BRACKET ENGINE SUPPORT",
+    "quantity": 56,
+    "location": "",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T07:19:25.693Z"
+  },
+  {
+    "code": "19 INCHES",
+    "description": "GILA TINT 5",
+    "quantity": 55,
+    "location": "Hrir",
+    "mmpcPart": "Mat",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T07:21:18.858Z"
+  },
+  {
+    "code": "022740-0822",
+    "description": "BLOWER ASSY AIRCON BIG",
+    "quantity": 6,
+    "location": "H",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": false,
+    "timestamp": "2025-12-10T07:28:41.260Z"
+  },
+  {
+    "code": "#8",
+    "description": "WIRE AUTO",
+    "quantity": 6,
+    "location": "Hui",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": false,
+    "timestamp": "2025-12-10T07:29:43.596Z"
+  },
+  {
+    "code": "#8",
+    "description": "WIRE AUTO",
+    "quantity": 52,
+    "location": "Jejej",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": false,
+    "timestamp": "2025-12-10T07:38:19.424Z"
+  },
+  {
+    "code": "",
+    "description": "Wheel",
+    "quantity": 22,
+    "location": "Iwuwhw",
+    "mmpcPart": "Yes",
+    "encodedBy": "admin",
+    "reason": "Camera not working",
+    "manual": true,
+    "timestamp": "2025-12-10T07:39:51.948Z"
+  },
+  {
+    "code": "#2345",
+    "description": "Gulong",
+    "quantity": 12,
+    "location": "Jdidjd",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "Camera not working",
+    "manual": true,
+    "timestamp": "2025-12-10T07:40:26.304Z"
+  },
+  {
+    "code": "LT000001",
+    "description": "BEDLINER",
+    "quantity": "9",
+    "location": "S",
+    "mmpcPart": "Yes",
+    "encodedBy": "kaira",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T07:56:41.590Z"
+  },
+  {
+    "code": "MAT04R",
+    "description": "MATERIALS REG",
+    "quantity": 5,
+    "location": "cc",
+    "mmpcPart": "No",
+    "encodedBy": "kaira",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T08:02:45.877Z"
+  },
+  {
+    "code": "#06",
+    "description": "BOLT",
+    "quantity": 23,
+    "location": "LOK",
+    "mmpcPart": "No",
+    "encodedBy": "kaira",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-10T08:04:20.190Z"
   }
 ]

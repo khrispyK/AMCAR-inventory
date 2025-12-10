@@ -22,6 +22,14 @@
         if (userData.role === "ADMIN") {
           document.getElementById("downloadSection").style.display = "block";
         }
+
+        // Update last part display from localStorage
+        const savedLastPart = localStorage.getItem("lastPart");
+        console.log("Last part on load:", savedLastPart);
+        if (savedLastPart) {
+          document.getElementById("lastPartDisplay").textContent =
+            savedLastPart;
+        }
       };
     </script>
 
@@ -85,7 +93,7 @@
 
       <!-- Manual Entry Section -->
       <div class="section">
-        <div class="section-title">Manual Entry</div>
+        <div class="section-title">Enter barcode</div>
         <input
           type="text"
           id="manualCodeInput"
@@ -117,9 +125,19 @@
       <div class="section form-section" id="formBox">
         <div class="section-title">Add Details</div>
         <label>Quantity</label>
-        <input type="number" id="quantity" placeholder="Enter quantity" />
+        <input
+          type="number"
+          id="quantity"
+          placeholder="Enter quantity"
+          required
+        />
         <label>Location</label>
-        <input type="text" id="location" placeholder="Enter location" />
+        <input
+          type="text"
+          id="location"
+          placeholder="Enter location"
+          required
+        />
         <button onclick="submitForm()">Save to Database</button>
       </div>
 

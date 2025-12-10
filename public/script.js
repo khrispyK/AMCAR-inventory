@@ -118,7 +118,15 @@ let isManual = false;
         document.getElementById("mmpcField").textContent =
           part.mmpcPart || "No";
 
-        localStorage.setItem("lastPart", barcode);
+        // Update global state so submitForm() sends the correct code/description
+        currentCode = barcode;
+        currentDescription = part.description || "";
+        currentMMPCPart = part.mmpcPart || "No";
+        isManual = false;
+
+        // Do NOT persist as "lastPart" here — only persist when the entry is saved.
+        // The decoded barcode is shown in the UI but should not become the
+        // "Last Part" until the user saves (submitForm handles setting lastPart).
 
         document.getElementById("resultBox").style.display = "block";
         document.getElementById("formBox").style.display = "block";
@@ -169,26 +177,51 @@ let isManual = false;
       }
 
       async function submitForm() {
+        const quantity = document.getElementById("quantity").value.trim();
+        const location = document.getElementById("location").value.trim();
+
+        // Validate required fields
+        if (!quantity) {
+          showModal("❌ Quantity is required.");
+          return;
+        }
+        if (!location) {
+          showModal("❌ Location is required.");
+          return;
+        }
+
         const user = localStorage.getItem("user");
     
         const payload = {
             code: currentCode,
             description: currentDescription,
-            quantity: document.getElementById("quantity").value,
-            location: document.getElementById("location").value,
+            quantity: quantity,
+            location: location,
             encodedBy: user,  // ← FIXED
             manual: isManual,
             mmpcPart: currentMMPCPart || "No"
         };
     
-        const res = await fetch("/api/scan", {
+        try {
+          const res = await fetch("/api/scan", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
-        });
+          });
     
-        const data = await res.json();
-        if (data.success) showModal("Scan saved successfully!");
+          const data = await res.json();
+          if (data.success) {
+            // Update last part display
+            localStorage.setItem("lastPart", currentCode);
+            document.getElementById("lastPartDisplay").textContent = currentCode;
+            showModal("Scan saved successfully!");
+          } else {
+              showModal("❌ Error: " + (data.message || "Failed to save"));
+          }
+        } catch (err) {
+          showModal("❌ Server error: " + err.message);
+          console.error("Submit error:", err);
+        }
     }
     async function getDescription(code) {
       const res = await fetch("/api/parts");

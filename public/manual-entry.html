@@ -143,8 +143,10 @@
           const data = await res.json();
 
           if (data.success) {
+            // Update last part in localStorage
+            localStorage.setItem("lastPart", code);
             alert("Manual entry saved! ✅");
-            history.back();
+            window.location.href = "index.html";
           } else {
             alert("❌ Error: " + data.message);
           }
