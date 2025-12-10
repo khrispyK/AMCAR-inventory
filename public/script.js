@@ -26,11 +26,13 @@
         document.body.onkeydown = null;
 
         // Option B: reload page after user clicks OK
-        location.reload();
+        setTimeout(() => location.reload(), 200);
       }
       /* =============================
          USER + LAST PART DISPLAY
       ============================== */
+
+      
       const userDisplay = localStorage.getItem("user");
 
       if (userDisplay) {
@@ -41,19 +43,19 @@
         document.getElementById("downloadSection").style.display = "block";
       }
 
-      const savedLastPart = localStorage.getItem("lastPartNumber");
+      const savedLastPart = localStorage.getItem("lastPart");
       if (savedLastPart) {
         document.getElementById("lastPartDisplay").innerText = savedLastPart;
       }
 
       function updateLastPart(part) {
         document.getElementById("lastPartDisplay").innerText = part;
-        localStorage.setItem("lastPartNumber", part);
+        localStorage.setItem("lastPart", part);
       }
 
       function logout() {
         localStorage.removeItem("user");
-        localStorage.removeItem("lastPartNumber");
+        localStorage.removeItem("lastPart");
         window.location.href = "login.html";
       }
     
@@ -289,6 +291,8 @@ let isManual = false;
     /* =============================
    LIVE MANUAL ENTRY SEARCH
 ============================= */
+
+
 
 const manualInput = document.getElementById("manualCodeInput");
 const suggestionsBox = document.getElementById("suggestionsBox");
