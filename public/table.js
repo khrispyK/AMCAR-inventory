@@ -1,70 +1,107 @@
+let isEditing = false;
+
 async function loadTable() {
-    const response = await fetch("/api/scans");
-    let data = await response.json();
+  const response = await fetch("/api/scans");
+  let data = await response.json();
+
+  // Add the real index before sorting so PUT works
+  data = data.map((row, idx) => ({ ...row, realIndex: idx }));
+
+  data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  data = data.slice(0, 20);
+
+  const tbody = document.querySelector("#dataTable tbody");
+  tbody.innerHTML = "";
+
+  data.forEach((row, index) => {
+    const tr = document.createElement("tr");
+
+    tr.dataset.realIndex = row.realIndex;  // << store REAL index
+
+    tr.innerHTML = `
+      <td>${row.code}</td>
+      <td>${row.description}</td>
+      <td>${row.mmpcPart}</td>
+      <td>${row.quantity}</td>
+      <td>${row.location}</td>
+      <td>${row.encodedBy || "—"}</td>
+      <td>${row.timestamp}</td>
+      <td>
+        <button onclick="editRow(${index})">Edit</button>
+        <button onclick="deleteRow(${index})">Delete</button>
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+
   
-    // Sort by newest entries first (assuming each entry has "date")
-    data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+  async function editRow(index) {
+    const tr = document.querySelectorAll("#dataTable tbody tr")[index];
+    const btn = tr.querySelector("button");
   
-    // Keep only the latest 20
-    data = data.slice(0, 20);
+    if (btn.textContent === "Edit") {
+      isEditing = true;
+      btn.textContent = "Save";
   
-    const tbody = document.querySelector("#dataTable tbody");
-    tbody.innerHTML = "";
+      // Convert each editable cell into an input
+      const fields = ["code", "description", "mmpcPart", "quantity", "location"];
   
-    data.forEach((row, index) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${row.code}</td>
-        <td>${row.description}</td>
-        <td>${row.mmpcPart}</td>
-        <td>${row.quantity}</td>
-        <td>${row.location}</td>
-        <td>${row.encodedBy || "—"}</td>
-        <td>${row.timestamp}</td>
-        <td>
-          <button onclick="editRow(${index})">Edit</button>
-          <button onclick="deleteRow(${index})">Delete</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
+      fields.forEach((field, i) => {
+        const td = tr.children[i];
+        const value = td.textContent.trim();
+        td.innerHTML = `<input data-field="${field}" value="${value}">`;
+      });
+  
+      return;
+    }
+  
+    // SAVE
+
+const realIndex = tr.dataset.realIndex;  // <--- FIXED!!
+
+const inputs = tr.querySelectorAll("input");
+const updated = {};
+
+inputs.forEach(input => {
+  updated[input.dataset.field] = input.value;
+});
+
+await fetch(`/api/scans/${realIndex}`, {
+  method: "PUT",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(updated)
+});
+
+isEditing = false;
+btn.textContent = "Edit";
+loadTable();
+
+  
+    isEditing = false;
+    btn.textContent = "Edit";
+    loadTable();
   }
   
-
-async function editRow(index, btn) {
-    const tr = btn.parentNode.parentNode;
-    const inputs = tr.querySelectorAll("input");
-
-    if (btn.textContent === "💾") {
-        // Save
-        const updated = {};
-        inputs.forEach(input => {
-            const field = input.dataset.field;
-            updated[field] = input.value;
-        });
-
-        await fetch(`/api/scans/${index}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updated)
-        });
-
-        btn.textContent = "✏️";
-        inputs.forEach(i => i.disabled = true);
-        return;
-    }
-
-    btn.textContent = "💾";
-    inputs.forEach(i => i.disabled = false);
-}
 
 async function deleteRow(index) {
     if (!confirm("Delete this entry?")) return;
 
-    await fetch(`/api/scans/${index}`, { method: "DELETE" });
+    const tr = document.querySelectorAll("#dataTable tbody tr")[index];
+const realIndex = tr.dataset.realIndex;
+
+    await fetch(`/api/scans/${realIndex}`, { method: "DELETE" });
     loadTable();
 }
 
+
+
 window.onload = loadTable;
-setInterval(loadTable, 3000);
+setInterval(() => {
+  if (!isEditing) loadTable();
+}, 3000);
+
 
