@@ -1,35 +1,3 @@
 [
-  {
-    "code": "DD-X1R",
-    "description": "DIESEL DECARBONIZER",
-    "quantity": 588,
-    "location": "ff",
-    "mmpcPart": "No",
-    "encodedBy": "kaira",
-    "reason": "",
-    "manual": true,
-    "timestamp": "2025-12-11T01:18:36.491Z"
-  },
-  {
-    "code": "LT100007",
-    "description": "RAD CAP STICKER",
-    "quantity": 23,
-    "location": "ff",
-    "mmpcPart": "Yes",
-    "encodedBy": "kaira",
-    "reason": "",
-    "manual": false,
-    "timestamp": "2025-12-11T01:20:17.303Z"
-  },
-  {
-    "code": "MZ321115",
-    "description": "GL 4 GEAR OIL 75W85W",
-    "quantity": 34,
-    "location": "room 3",
-    "mmpcPart": "Yes",
-    "encodedBy": "admin",
-    "reason": "",
-    "manual": true,
-    "timestamp": "2025-12-11T02:39:42.799Z"
-  }
+  
 ]
