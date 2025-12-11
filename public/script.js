@@ -143,43 +143,140 @@ let isManual = false;
         const img = await createImageBitmap(file);
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-        const MAX = 800;
-        const scale = Math.min(MAX / img.width, MAX / img.height);
-        canvas.width = img.width * scale;
-        canvas.height = img.height * scale;
+
+        // Choose a target size to make small barcodes larger for decoding
+        const TARGET = 1200; // desired minimum dimension
+        const MAX_UPSCALE = 2.0; // avoid extreme upscaling
+
+        // Compute scale factor (allow upscaling for small images, but cap it)
+        let scale = Math.max(TARGET / img.width, TARGET / img.height);
+        if (scale > MAX_UPSCALE) scale = MAX_UPSCALE;
+        if (scale < 0.5) scale = 0.5; // avoid extremely small outputs
+
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+
+        // Draw scaled image
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        return await new Promise((resolve) =>
-          canvas.toBlob(resolve, "image/png")
-        );
+
+        // Apply simple contrast + brightness adjustment and sharpening
+        try {
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imageData.data;
+
+          // contrast/brightness: linear transform
+          const contrast = 1.2; // >1 increases contrast
+          const brightness = 0; // can tweak if needed
+
+          // apply contrast and convert to grayscale roughly for thresholding
+          for (let i = 0; i < data.length; i += 4) {
+            // RGB
+            for (let c = 0; c < 3; c++) {
+              let v = data[i + c];
+              v = (v - 128) * contrast + 128 + brightness;
+              data[i + c] = Math.max(0, Math.min(255, v));
+            }
+          }
+
+          // Put adjusted data back
+          ctx.putImageData(imageData, 0, 0);
+
+          // Sharpen with a convolution kernel
+          const kernel = [0, -1, 0, -1, 5, -1, 0, -1, 0];
+          const w = canvas.width;
+          const h = canvas.height;
+          const src = ctx.getImageData(0, 0, w, h);
+          const dst = ctx.createImageData(w, h);
+          const s = src.data;
+          const d = dst.data;
+
+          for (let y = 1; y < h - 1; y++) {
+            for (let x = 1; x < w - 1; x++) {
+              for (let c = 0; c < 3; c++) {
+                let i = (y * w + x) * 4 + c;
+                let sum = 0;
+                // apply 3x3 kernel
+                let ki = 0;
+                for (let ky = -1; ky <= 1; ky++) {
+                  for (let kx = -1; kx <= 1; kx++) {
+                    const xi = x + kx;
+                    const yi = y + ky;
+                    const ii = (yi * w + xi) * 4 + c;
+                    sum += s[ii] * kernel[ki++];
+                  }
+                }
+                d[i] = Math.max(0, Math.min(255, sum));
+              }
+              // copy alpha
+              d[(y * w + x) * 4 + 3] = s[(y * w + x) * 4 + 3];
+            }
+          }
+
+          ctx.putImageData(dst, 0, 0);
+        } catch (err) {
+          // If any processing fails, continue with the scaled image
+          console.warn("Image preprocessing warning:", err);
+        }
+
+        return await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
       }
 
       function decodeImage(buffer) {
         return new Promise((resolve, reject) => {
-          Quagga.decodeSingle(
-            {
-              src: URL.createObjectURL(buffer),
-              numOfWorkers: 0,
-              locate: true,
-              inputStream: { size: 800 },
-              decoder: {
-                readers: [
-                  "code_128_reader",
-                  "code_39_reader",
-                  "code_93_reader",
-                  "ean_reader",
-                  "ean_8_reader",
-                  "upc_reader",
-                ],
-              },
+          const config = {
+            src: URL.createObjectURL(buffer),
+            numOfWorkers: 0,
+            locate: true,
+            inputStream: { size: 1200 },
+            locator: { patchSize: "large", halfSample: false },
+            decoder: {
+              readers: [
+                "code_128_reader",
+                "code_39_reader",
+                "code_93_reader",
+                "ean_reader",
+                "ean_8_reader",
+                "upc_reader",
+              ],
             },
-            (result) => {
-              if (result && result.codeResult) {
-                resolve(result.codeResult.code);
-              } else {
+          };
+
+          Quagga.decodeSingle(config, (result) => {
+            if (result && result.codeResult) {
+              const barcode = result.codeResult.code;
+              const cleanCode = barcode.split(" ")[0];
+              resolve(cleanCode);
+            } else {
+              // If first attempt fails, try a second pass with a rotated image
+              // (some cameras rotate images) — attempt rotation fallback
+              try {
+                const img = new Image();
+                img.onload = () => {
+                  const c = document.createElement("canvas");
+                  const ctx = c.getContext("2d");
+                  c.width = img.height;
+                  c.height = img.width;
+                  // rotate 90 degrees
+                  ctx.translate(c.width / 2, c.height / 2);
+                  ctx.rotate((90 * Math.PI) / 180);
+                  ctx.drawImage(img, -img.width / 2, -img.height / 2);
+                  c.toBlob((rotBlob) => {
+                    Quagga.decodeSingle(Object.assign({}, config, { src: URL.createObjectURL(rotBlob) }), (r2) => {
+                      if (r2 && r2.codeResult) {
+                        const barcode2 = r2.codeResult.code;
+                        resolve(barcode2.split(" ")[0]);
+                      } else {
+                        reject("No barcode detected");
+                      }
+                    });
+                  }, "image/png");
+                };
+                img.src = URL.createObjectURL(buffer);
+              } catch (err) {
                 reject("No barcode detected");
               }
             }
-          );
+          });
         });
       }
 
@@ -330,7 +427,34 @@ let isManual = false;
         }
     }
 
-    /* =============================
+/* =============================
+   LEVENSHTEIN DISTANCE (FUZZY MATCHING)
+============================= */
+function levenshteinDistance(a, b) {
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+    }
+    for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+    }
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
+                );
+            }
+        }
+    }
+    return matrix[b.length][a.length];
+}
+
+/* =============================
    LIVE MANUAL ENTRY SEARCH
 ============================= */
 
@@ -347,10 +471,28 @@ manualInput.addEventListener("input", () => {
         return;
     }
 
-    // Filter matches
-    const results = partsData.filter(p => 
-        p.code.toLowerCase().includes(query)
-    );
+    let results = [];
+
+    // If query contains a space, use fuzzy matching to find the closest match
+    if (query.includes(" ")) {
+        const cleanQuery = query.split(" ")[0]; // Take the part before the space
+        
+        // Score all parts by their similarity distance
+        const scored = partsData.map(p => ({
+            ...p,
+            distance: levenshteinDistance(cleanQuery.toLowerCase(), p.code.toLowerCase())
+        }));
+        
+        // Sort by distance (ascending) and take only the closest match
+        results = scored
+            .sort((a, b) => a.distance - b.distance)
+            .slice(0, 1);
+    } else {
+        // Original: substring matching
+        results = partsData.filter(p => 
+            p.code.toLowerCase().includes(query)
+        );
+    }
 
     // Build suggestions
     if (results.length > 0) {
@@ -363,6 +505,46 @@ manualInput.addEventListener("input", () => {
         suggestionsBox.style.display = "none";
     }
 });
+
+// Handle Enter key to select single result
+manualInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        const suggestions = suggestionsBox.querySelectorAll("div");
+        
+        // If there's exactly one suggestion, auto-select it
+        if (suggestions.length === 1) {
+            e.preventDefault();
+            const selected = suggestions[0].getAttribute("data-code");
+            if (selected) {
+                const part = partsData.find(p => p.code === selected);
+                if (part) {
+                    // update globals
+                    currentCode = part.code;
+                    currentDescription = part.description;
+                    currentMMPCPart = part.mmpcPart || "No";
+                    isManual = true;
+
+                    // Fill input
+                    manualInput.value = part.code;
+
+                    // Render UI
+                    document.getElementById("decodedText").textContent = part.code;
+                    document.getElementById("codeField").textContent = part.code;
+                    document.getElementById("description").textContent = part.description;
+                    document.getElementById("mmpcField").textContent = currentMMPCPart;
+
+                    // Show result boxes
+                    document.getElementById("resultBox").style.display = "block";
+                    document.getElementById("formBox").style.display = "block";
+
+                    // Hide suggestions
+                    suggestionsBox.style.display = "none";
+                }
+            }
+        }
+    }
+});
+
 
 // When clicking a suggestion
 suggestionsBox.addEventListener("click", (e) => {
