@@ -48,6 +48,13 @@
         document.getElementById("lastPartDisplay").innerText = savedLastPart;
       }
 
+      // Restore last used location (persisted between saves)
+      const savedLastLocation = localStorage.getItem("lastLocation");
+      if (savedLastLocation) {
+        const locInput = document.getElementById("location");
+        if (locInput) locInput.value = savedLastLocation;
+      }
+
       function updateLastPart(part) {
         document.getElementById("lastPartDisplay").innerText = part;
         localStorage.setItem("lastPart", part);
@@ -214,6 +221,8 @@ let isManual = false;
             // Update last part display
             localStorage.setItem("lastPart", currentCode);
             document.getElementById("lastPartDisplay").textContent = currentCode;
+            // Persist the last used location so it remains in the input
+            try { localStorage.setItem("lastLocation", location); } catch (e) { console.warn('Could not save lastLocation', e); }
             showModal("Scan saved successfully!");
           } else {
               showModal("❌ Error: " + (data.message || "Failed to save"));

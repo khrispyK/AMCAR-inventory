@@ -145,6 +145,12 @@
           if (data.success) {
             // Update last part in localStorage
             localStorage.setItem("lastPart", code);
+            // Persist location so index.html keeps the last used location
+            try {
+              localStorage.setItem("lastLocation", location);
+            } catch (e) {
+              console.warn("Could not save lastLocation", e);
+            }
             alert("Manual entry saved! ✅");
             window.location.href = "index.html";
           } else {

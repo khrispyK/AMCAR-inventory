@@ -709,5 +709,16 @@
     "reason": "",
     "manual": true,
     "timestamp": "2025-12-10T08:04:20.190Z"
+  },
+  {
+    "code": "#06",
+    "description": "BOLT",
+    "quantity": 53,
+    "location": "room 3",
+    "mmpcPart": "No",
+    "encodedBy": "admin",
+    "reason": "",
+    "manual": true,
+    "timestamp": "2025-12-11T00:41:37.667Z"
   }
 ]
