@@ -40,11 +40,11 @@ function closeModal() {
 const userDisplay = localStorage.getItem("user");
 
 if (userDisplay) {
-  document.getElementById("usernameDisplay").innerText = userDisplay;
-}
-
-if (userDisplay && userDisplay.trim().toLowerCase() === "admin") {
-  document.getElementById("downloadSection").style.display = "block";
+        const userObj = JSON.parse(userDisplay);
+        document.getElementById("usernameDisplay").innerText = userObj.username;
+        if (userObj.username && userObj.username.trim().toLowerCase() === "admin") {
+          document.getElementById("downloadSection").style.display = "block";
+        }
 }
 
 const savedLastPart = localStorage.getItem("lastPart");
@@ -458,13 +458,14 @@ async function submitForm() {
   }
 
   const user = localStorage.getItem("user");
+  const userData = user ? JSON.parse(user) : null;
 
   const payload = {
     code: currentCode,
     description: currentDescription,
     quantity: quantity,
     location: location,
-    encodedBy: user,
+    encodedBy: userData ? userData.username : "UNKNOWN",
     manual: isManual,
     mmpcPart: currentMMPCPart || "No"
   };

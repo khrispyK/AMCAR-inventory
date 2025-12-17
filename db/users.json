@@ -10,14 +10,104 @@
       "role": "USER"
     },
     {
-      "username": "user",
+      "username": "user1",
       "password": "user123",
       "role": "USER"
     },
     {
-      "username": "admin2",
-      "password": "admin123",
-      "role": "ADMIN"
+      "username": "user2",
+      "password": "user234",
+      "role": "USER"
+    },
+    {
+      "username": "user3",
+      "password": "user345",
+      "role": "USER"
+    },
+    {
+      "username": "user4",
+      "password": "user456",
+      "role": "USER"
+    },
+    {
+      "username": "user5",
+      "password": "user567",
+      "role": "USER"
+    },
+    {
+      "username": "user6",
+      "password": "user678",
+      "role": "USER"
+    },
+    {
+      "username": "user7",
+      "password": "user789",
+      "role": "USER"
+    },
+    {
+      "username": "user8",
+      "password": "user890",
+      "role": "USER"
+    },
+    {
+      "username": "user9",
+      "password": "user901",
+      "role": "USER"
+    },
+    {
+      "username": "user10",
+      "password": "user012",
+      "role": "USER"
+    },
+    {
+      "username": "user11",
+      "password": "user111",
+      "role": "USER"
+    },
+    {
+      "username": "user12",
+      "password": "user112",
+      "role": "USER"
+    },
+    {
+      "username": "user13",
+      "password": "user113",
+      "role": "USER"
+    },
+    {
+      "username": "user14",
+      "password": "user114",
+      "role": "USER"
+    },
+    {
+      "username": "user15",
+      "password": "user115",
+      "role": "USER"
+    },
+    {
+      "username": "user16",
+      "password": "user116",
+      "role": "USER"
+    },
+    {
+      "username": "user17",
+      "password": "user117",
+      "role": "USER"
+    },
+    {
+      "username": "user18",
+      "password": "user118",
+      "role": "USER"
+    },
+    {
+      "username": "user19",
+      "password": "user119",
+      "role": "USER"
+    },
+    {
+      "username": "user20",
+      "password": "user120",
+      "role": "USER"
     }
   ]
   

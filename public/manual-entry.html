@@ -52,7 +52,6 @@
       <div class="section">
         <label>Reason for Manual Encoding</label>
         <select id="manualReason" onchange="toggleOtherReason()">
-          <option value="">Select a reason</option>
           <option value="Barcode damaged">Barcode damaged</option>
           <option value="Camera not working">Camera not working</option>
           <option value="System could not read barcode">
@@ -122,13 +121,16 @@
           reason = document.getElementById("otherReason").value.trim();
         }
 
+        const user = localStorage.getItem("user");
+        const userData = user ? JSON.parse(user) : null;
+
         const payload = {
           code,
           description: desc,
           quantity: qty,
           location,
           mmpcPart: mmpc,
-          encodedBy: localStorage.getItem("user") || "UNKNOWN",
+          encodedBy: userData ? userData.username : "UNKNOWN",
           reason: reason, // ← THIS IS THE CORRECT LINE
           manual: true, // ← NEW (so we know it was manually encoded)
         };

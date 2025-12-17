@@ -414,7 +414,7 @@
           const result = await res.json();
 
           if (result.success) {
-            localStorage.setItem("user", result.user);
+            localStorage.setItem("user", JSON.stringify(result.user));
             btnText.textContent = "Success!";
 
             // Redirect after short delay
